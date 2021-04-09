@@ -23,9 +23,9 @@ void FIOToolkitModule::StartupModule()
 
 	// Get the base directory of this plugin
 #if ENGINE_MINOR_VERSION >= 23
-	FString BaseDir = FPaths::ProjectDir();// IPluginManager::Get().FindPlugin("IOToolkit")->GetBaseDir();
+	FString BaseDir = FPaths::ProjectDir();
 #elif ENGINE_MINOR_VERSION >= 15
-	FString BaseDir = FPaths::GameDir();// IPluginManager::Get().FindPlugin("IOToolkit")->GetBaseDir();
+	FString BaseDir = FPaths::GameDir();
 #endif
 	
 	// Add on the relative location of the third party dll and load it

@@ -4,7 +4,7 @@
 
 ```bash
 # Plugins 目录下执行
-git clone https://github.com/MrBaoquan/UE_IOToolkit.git IOToolkit
+git clone https://github.com/MrBaoquan/IOToolkit_UE4_Plugin.git IOToolkit
 ```
 
 #### 支持
