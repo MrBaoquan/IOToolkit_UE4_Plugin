@@ -21,7 +21,11 @@ public class IOToolkit : ModuleRules
             return Path.Combine(ModuleDirectory, "../../");
         }
     }
+#if UE_4_17_OR_LATER
     public IOToolkit(ReadOnlyTargetRules Target) : base(Target)
+#else
+    public IOToolkit(TargetInfo Target)
+#endif
 	{
 		PublicIncludePaths.AddRange(
 			new string[] {
@@ -29,9 +33,15 @@ public class IOToolkit : ModuleRules
                 Path.Combine(pluginDir, "ThirdParty/IOToolkit/include")
 				// ... add public include paths required here ...
 			}
-			);
+		);
 
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+        string _ioModuleDir = Path.Combine(pluginDir, "ThirdParty/IOToolkit");
+        if (!Directory.Exists(_ioModuleDir))
+        {
+            Console.WriteLine("[Error]: Can not find IOToolkit module which should be located at: " 
+                + Path.GetFullPath(_ioModuleDir));
+        }
 
         PrivateIncludePaths.AddRange(
 			new string[] {

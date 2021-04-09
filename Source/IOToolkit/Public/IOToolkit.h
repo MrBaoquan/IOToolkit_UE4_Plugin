@@ -4,10 +4,10 @@
 
 #include "Runtime/Launch/Resources/Version.h"
 
-#if ENGINE_MINOR_VERSION >= 23
+#if ENGINE_MINOR_VERSION >=23
 #include "Modules/ModuleManager.h"
-#elif ENGINE_MINOR_VERSION >= 15
-#include "ModuleManager.h""
+#elif ENGINE_MINOR_VERSION >=15
+#include "ModuleManager.h"
 #endif
 
 
