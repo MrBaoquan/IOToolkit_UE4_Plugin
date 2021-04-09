@@ -1,0 +1,26 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "2.1.0",
+	"FriendlyName": "IOToolkit",
+	"Description": "",
+	"Category": "IO",
+	"CreatedBy": "MrBaoquan",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+  "Installed": false,
+	"Modules": [
+		{
+			"Name": "IOToolkit",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64","Win32"
+			]
+		}
+	]
+}
