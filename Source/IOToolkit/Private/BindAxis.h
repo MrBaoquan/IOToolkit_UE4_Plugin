@@ -20,9 +20,13 @@ public:
 		FAxisDelegatePin Update;
 
 	UFUNCTION(BlueprintCallable,
-		meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
-		Category = "IOToolkit")
-		static UBindAxis* IOSubscribeAxis(const UObject* WorldContextObject, FString Device, FString Axis);
+		meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",
+			ToolTip = "¶©ÔÄÖáÊÂ¼þ",
+			Category = "IOToolkit"
+		)
+	)
+		static UBindAxis* IO_SubscribeAxis(const UObject* WorldContextObject, 
+			FString Device, FString Axis);
 
 	virtual void Activate() override;
 	
@@ -32,5 +36,4 @@ private:
 
 	FString DeviceName;
 	FString AxisName;
-	
 };

@@ -10,6 +10,11 @@
 #include "ModuleManager.h"
 #endif
 
+UENUM(BlueprintType)
+enum ESetDOType {
+	OAxis,
+	OAction
+};
 
 class FIOToolkitModule : public IModuleInterface
 {

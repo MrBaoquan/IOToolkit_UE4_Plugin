@@ -1,4 +1,4 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
 using System.IO;
@@ -27,7 +27,11 @@ public class IOToolkit : ModuleRules
     public IOToolkit(TargetInfo Target)
 #endif
 	{
-		PublicIncludePaths.AddRange(
+        // uncomment code below to package project without rebuild this module
+        //bUsePrecompiled = true;
+        //PrecompileForTargets = PrecompileTargetsType.None;
+
+        PublicIncludePaths.AddRange(
 			new string[] {
 				Path.Combine(pluginDir,"Source/IOToolkit/Public"),
                 Path.Combine(pluginDir, "ThirdParty/IOToolkit/include")
@@ -36,6 +40,7 @@ public class IOToolkit : ModuleRules
 		);
 
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+
         string _ioModuleDir = Path.Combine(pluginDir, "ThirdParty/IOToolkit");
         if (!Directory.Exists(_ioModuleDir))
         {
@@ -43,34 +48,31 @@ public class IOToolkit : ModuleRules
                 + Path.GetFullPath(_ioModuleDir));
         }
 
-        PrivateIncludePaths.AddRange(
-			new string[] {
-				"IOToolkit/Private",
-				// ... add other private include paths required here ...
-			}
-			);
-			
-		
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
-				"Core",
-                "Projects"
-				// ... add other public dependencies that you statically link with here ...
-			}
-			);
-        string _platform = "Win64";
-        if (Target.Platform == UnrealTargetPlatform.Win32)
-        {
-            _platform = "Win32";
-        }
+
+        string _platform = Target.Platform == UnrealTargetPlatform.Win32 ? "Win32" : "Win64";
 
         CopyAll(
             new DirectoryInfo(Path.Combine(pluginDir, "ThirdParty/IOToolkit/binaries", _platform)), 
-            new DirectoryInfo(Path.Combine(projectDir, "Binaries", _platform))
+            new DirectoryInfo(Path.Combine(pluginDir, "Binaries", _platform))
+        );
+        PrivateIncludePaths.AddRange(
+            new string[] {
+                        "IOToolkit/Private",
+                // ... add other private include paths required here ...
+            }
         );
 
-        PublicAdditionalLibraries.Add(Path.Combine(projectDir, "Binaries", _platform, "IODevice.lib"));
+
+        PublicDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "Core",
+                "Projects"
+				// ... add other public dependencies that you statically link with here ...
+			}
+        );
+
+        PublicAdditionalLibraries.Add(Path.Combine(pluginDir, "Binaries", _platform, "IODevice.lib"));
 
         // Delay-load the DLL, so we can load it from the right place first
         PublicDelayLoadDLLs.Add("IODevice.dll");
@@ -92,6 +94,8 @@ public class IOToolkit : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 		);
+
+        RuntimeDependencies.Add(Path.Combine("$(PluginDir)/Binaries",_platform,"..."), StagedFileType.NonUFS);
     }
 
 
@@ -116,6 +120,7 @@ public class IOToolkit : ModuleRules
 
         foreach (var subDirInfo in source.GetDirectories())
         {
+            if (subDirInfo.Name == "Logs") continue;
             DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(subDirInfo.Name);
             CopyAll(subDirInfo, nextTargetSubDir);
         }

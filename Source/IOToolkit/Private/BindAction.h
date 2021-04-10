@@ -23,9 +23,13 @@ public:
 			FActionDelegatePin IE_Released;
 
 		UFUNCTION(BlueprintCallable,
-			meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
-			Category = "IOToolkit")
-			static UBindAction* IOSubscribeAction(const UObject* WorldContextObject,
+			meta = (
+				BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",
+				ToolTip = "订阅动作事件",
+				Category = "IOToolkit"
+			)
+		)
+			static UBindAction* IO_SubscribeAction(const UObject* WorldContextObject,
 				FString Device,
 				FString Action);
 

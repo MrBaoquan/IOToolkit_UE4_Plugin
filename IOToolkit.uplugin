@@ -1,4 +1,4 @@
-{
+﻿{
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "2.1.0",
@@ -12,7 +12,8 @@
 	"SupportURL": "",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
-  "Installed": false,
+  "Installed": true,
+  "EnabledByDefault": false,
 	"Modules": [
 		{
 			"Name": "IOToolkit",

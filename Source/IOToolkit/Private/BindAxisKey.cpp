@@ -1,22 +1,21 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BindAxis.h"
-#include "IOToolkit.h"
+
+#include "BindAxisKey.h"
 #include "IODeviceController.h"
 
 namespace io = IOToolkit;
 
-
-UBindAxis* UBindAxis::IO_SubscribeAxis(const UObject* WorldContextObject, FString Device, FString Axis)
+UBindAxisKey* UBindAxisKey::IO_SubscribeAxisKey(const UObject* WorldContextObject, FString Device, FString AxisKey)
 {
-	UBindAxis* Node = NewObject<UBindAxis>();
+	UBindAxisKey* Node = NewObject<UBindAxisKey>();
 	Node->WorldContextObject = WorldContextObject;
 	Node->DeviceName = Device;
-	Node->AxisName = Axis;
+	Node->AxisKeyName = AxisKey;
 	return Node;
 }
 
-void UBindAxis::Activate()
+void UBindAxisKey::Activate()
 {
 	if (nullptr == WorldContextObject)
 	{
@@ -32,10 +31,9 @@ void UBindAxis::Activate()
 	}
 
 	Active = true;
-	
+
 	io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-		.BindAxis(TCHAR_TO_ANSI(*AxisName), [&](float val) {
+		.BindAxisKey(TCHAR_TO_ANSI(*AxisKeyName), [&](float val) {
 		this->Update.Broadcast(val);
 	});
-	
 }

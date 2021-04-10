@@ -1,21 +1,21 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BindAction.h"
-#include "IOToolkit.h"
+
+#include "BindKey.h"
 #include "IODeviceController.h"
 
 namespace io = IOToolkit;
 
-UBindAction* UBindAction::IO_SubscribeAction(const UObject* WorldContextObject, FString Device, FString Action)
+UBindKey* UBindKey::IO_SubscribeKey(const UObject* WorldContextObject, FString Device, FString Key)
 {
-	UBindAction* Node = NewObject<UBindAction>();
+	UBindKey* Node = NewObject<UBindKey>();
 	Node->WorldContextObject = WorldContextObject;
 	Node->DeviceName = Device;
-	Node->ActionName = Action;
+	Node->KeyName = Key;
 	return Node;
 }
 
-void UBindAction::Activate()
+void UBindKey::Activate()
 {
 	if (nullptr == WorldContextObject)
 	{
@@ -32,12 +32,12 @@ void UBindAction::Activate()
 
 	Active = true;
 	auto& _device = io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*DeviceName));
-	
-	_device.BindAction(TCHAR_TO_ANSI(*ActionName), io::IE_Pressed, [&](io::FKey InKey) {
-		this->IE_Pressed.Broadcast(FString(InKey.GetName()));
+
+	_device.BindKey(TCHAR_TO_ANSI(*KeyName), io::IE_Pressed, [&]() {
+		this->IE_Pressed.Broadcast();
 	});
 
-	_device.BindAction(TCHAR_TO_ANSI(*ActionName), io::IE_Released, [&](io::FKey InKey) {
-		this->IE_Released.Broadcast(FString(InKey.GetName()));
+	_device.BindKey(TCHAR_TO_ANSI(*KeyName), io::IE_Released, [&]() {
+		this->IE_Released.Broadcast();
 	});
 }
