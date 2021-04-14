@@ -1,7 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "IOToolkit_BPF.h"
-#include "IOToolkit.h"
 #include "IODeviceController.h"
 namespace io = IOToolkit;
 
@@ -26,7 +25,7 @@ void UIOToolkit_BPF::IO_ClearBindings()
 	io::IODeviceController::Instance().ClearBindings();
 }
 
-void UIOToolkit_BPF::IO_SetDO(FString Device, FString Target, float Value, TEnumAsByte<ESetDOType> Type /*= DOType.OAction*/)
+void UIOToolkit_BPF::IO_SetDO(FString Device, FString Target, float Value, TEnumAsByte<ESetDOType::Type> Type /*= DOType.OAction*/)
 {
 	if (Device.IsEmpty()) {
 		UE_LOG(LogTemp, Warning, TEXT("Can not SetDo on an empty device."));

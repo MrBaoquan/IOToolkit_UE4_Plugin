@@ -1,4 +1,4 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -11,10 +11,12 @@
 #endif
 
 UENUM(BlueprintType)
-enum ESetDOType {
-	OAxis,
-	OAction
-};
+namespace ESetDOType {
+	enum Type{
+		OAxis,
+		OAction
+	};
+}
 
 class FIOToolkitModule : public IModuleInterface
 {

@@ -1,26 +1,27 @@
-﻿{
+{
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "2.1.0",
 	"FriendlyName": "IOToolkit",
-	"Description": "",
+	"Description": "Plugin for IOToolkit",
 	"Category": "IO",
 	"CreatedBy": "MrBaoquan",
 	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
+	"DocsURL": "https://parful.gitbook.io/iotoolkit-docs/develop-guide/ue4-plugin",
+	"MarketplaceURL": "https://github.com/MrBaoquan/IOToolkit_UE4_Plugin",
 	"SupportURL": "",
+	"EnabledByDefault": false,
 	"CanContainContent": true,
 	"IsBetaVersion": false,
-  "Installed": true,
-  "EnabledByDefault": false,
+	"Installed": false,
 	"Modules": [
 		{
 			"Name": "IOToolkit",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"WhitelistPlatforms": [
-				"Win64","Win32"
+				"Win64",
+				"Win32"
 			]
 		}
 	]

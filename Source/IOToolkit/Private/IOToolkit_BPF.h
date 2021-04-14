@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "IOToolkit.h"
 #include "IOToolkit_BPF.generated.h"
 
 /**
@@ -42,7 +43,7 @@ public:
 			Keywords = "IOToolkit",
 			ToolTip = "IO 设置输出"
 		), Category = "IOToolkit")
-			static void IO_SetDO(FString Device, FString Target, float Value, TEnumAsByte<ESetDOType> Type = ESetDOType::OAction);
+			static void IO_SetDO(FString Device, FString Target, float Value, TEnumAsByte<ESetDOType::Type> Type = ESetDOType::OAction);
 
 		UFUNCTION(BlueprintCallable, meta = (
 			Keywords = "IOToolkit",
