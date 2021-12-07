@@ -4,7 +4,7 @@
 
 #include "Runtime/Launch/Resources/Version.h"
 
-#if ENGINE_MINOR_VERSION >=23
+#if ENGINE_MINOR_VERSION >=20
 #include "Modules/ModuleManager.h"
 #elif ENGINE_MINOR_VERSION >=15
 #include "ModuleManager.h"
@@ -15,6 +15,18 @@ namespace ESetDOType {
 	enum Type{
 		OAxis,
 		OAction
+	};
+}
+
+UENUM(BlueprintType)
+namespace EIOEvent {
+	enum Type {
+		IE_Pressed = 0,
+		IE_Released = 1,
+		IE_Repeat = 2,
+		IE_DoubleClick = 3,
+		IE_Axis = 4,
+		IE_MAX = 5,
 	};
 }
 
