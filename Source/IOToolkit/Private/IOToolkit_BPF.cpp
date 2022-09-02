@@ -41,7 +41,7 @@ void UIOToolkit_BPF::IO_SetDO(FString Device, FString Target, float Value, TEnum
 	auto& _device = io::IODeviceController::Instance()
 		.GetIODevice(TCHAR_TO_ANSI(*Device));
 	if (Type == ESetDOType::OAction) {
-		_device.SetDO(TCHAR_TO_ANSI(*Device), Value);
+		_device.SetDO(TCHAR_TO_ANSI(*Target), Value);
 	}
 	else {
 		_device.SetDO(io::FKey(TCHAR_TO_ANSI(*Target)), Value);
