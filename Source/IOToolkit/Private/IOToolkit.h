@@ -4,10 +4,12 @@
 
 #include "Runtime/Launch/Resources/Version.h"
 
-#if ENGINE_MINOR_VERSION >=20
+#if ENGINE_MINOR_VERSION >= 20 || ENGINE_MAJOR_VERSION >=5
 #include "Modules/ModuleManager.h"
-#elif ENGINE_MINOR_VERSION >=15
+#include "Interfaces/IPluginManager.h"
+#elif ENGINE_MINOR_VERSION >= 15
 #include "ModuleManager.h"
+#include "IPluginManager.h"
 #endif
 
 UENUM(BlueprintType)
