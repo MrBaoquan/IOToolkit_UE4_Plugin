@@ -1,7 +1,8 @@
 ﻿// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
-
+#include "CoreMinimal.h"
+#include "Delegates/DelegateCombinations.h"
 #include "Runtime/Launch/Resources/Version.h"
 
 #if ENGINE_MINOR_VERSION >= 20 || ENGINE_MAJOR_VERSION >=5

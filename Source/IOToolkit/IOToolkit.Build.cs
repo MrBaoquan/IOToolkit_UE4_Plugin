@@ -29,7 +29,7 @@ public class IOToolkit : ModuleRules {
         PublicIncludePaths.AddRange (
             new string[] {
                 Path.Combine (pluginDir, "Source/IOToolkit/Public"),
-                    Path.Combine (pluginDir, "ThirdParty/IOToolkit/include")
+                Path.Combine (pluginDir, "ThirdParty")
                 // ... add public include paths required here ...
             }
         );
@@ -77,6 +77,8 @@ public class IOToolkit : ModuleRules {
                 "Engine",
                 "Slate",
                 "SlateCore",
+                "NetWorking",
+                "Sockets"
                 // ... add private dependencies that you statically link with here ...	
             }
         );

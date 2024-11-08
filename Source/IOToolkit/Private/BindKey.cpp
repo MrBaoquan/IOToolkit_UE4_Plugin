@@ -2,7 +2,7 @@
 
 
 #include "BindKey.h"
-#include "IODeviceController.h"
+#include "IOToolkit/include/IODeviceController.h"
 
 namespace io = IOToolkit;
 

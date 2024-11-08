@@ -4,12 +4,9 @@
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "IOToolkit.h"
+#include "IODevice.h"
 #include "IOToolkit_BPF.generated.h"
 
-
-DECLARE_DYNAMIC_DELEGATE(FActionDelegate);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FActionDelegateWithKey, FString, KeyName);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FAxisDelegate, float, AxisValue);
 
 /**
  * 
@@ -18,8 +15,13 @@ UCLASS()
 class IOTOOLKIT_API UIOToolkit_BPF : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
+
 public:
-	
+
+	DECLARE_DYNAMIC_DELEGATE(FActionDelegate);
+	DECLARE_DYNAMIC_DELEGATE_OneParam(FActionDelegateWithKey, FString, KeyName);
+	DECLARE_DYNAMIC_DELEGATE_OneParam(FAxisDelegate, float, AxisValue);
+
 		UFUNCTION(BlueprintCallable, meta = (
 			Keywords = "IOToolkit",
 			ToolTip="加载 IO设备"
@@ -44,6 +46,12 @@ public:
 		), Category = "IOToolkit")
 			static void IO_ClearBindings();
 
+		UFUNCTION(BlueprintCallable, meta = (
+			Keywords="IOToolkit",
+			ToolTip = "获取IO设备"
+		),Category="IOToolkit")
+			static UIODevice* IO_GetDevice(FString DeviceName);
+			
 		UFUNCTION(BlueprintCallable, meta = (
 			Keywords = "IOToolkit",
 			ToolTip = "IO 立即执行输出"

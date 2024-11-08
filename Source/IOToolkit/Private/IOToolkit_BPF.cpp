@@ -1,11 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "IOToolkit_BPF.h"
-#include "IODeviceController.h"
+#include "IODevice.h"
+#include "IOToolkit/include/IODeviceController.h"
 namespace io = IOToolkit;
 
 void UIOToolkit_BPF::IO_Load()
 {
+	UIODevice::ClearIODevices();
 	IO_ClearBindings();
 	io::IODeviceController::Instance().Load();
 }
@@ -17,12 +19,18 @@ void UIOToolkit_BPF::IO_Update()
 
 void UIOToolkit_BPF::IO_Unload()
 {
+	UIODevice::ClearIODevices();
 	io::IODeviceController::Instance().Unload();
 }
 
 void UIOToolkit_BPF::IO_ClearBindings()
 {
 	io::IODeviceController::Instance().ClearBindings();
+}
+
+UIODevice* UIOToolkit_BPF::IO_GetDevice(FString DeviceName /*= TEXT("")*/)
+{
+	return UIODevice::GetOrCreateIODevice(DeviceName);
 }
 
 int32 UIOToolkit_BPF::IO_DOImmediate(FString Device)
