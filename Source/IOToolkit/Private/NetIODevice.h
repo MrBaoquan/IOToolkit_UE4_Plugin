@@ -7,12 +7,12 @@
 UENUM(BlueprintType)
 enum class ENETIOEvent : uint8
 {
-    SetAll   UMETA(DisplayName = "Set All"),
-    SetDI    UMETA(DisplayName = "Set DI"),
-    SetAD    UMETA(DisplayName = "Set AD"),
-    ZeroAll  UMETA(DisplayName = "Zero All"),
-    ZeroDI   UMETA(DisplayName = "Zero DI"),
-    ZeroAD   UMETA(DisplayName = "Zero AD")
+    SetAll=0   UMETA(DisplayName = "Set All"),
+    SetDI=1    UMETA(DisplayName = "Set DI"),
+    SetAD=2    UMETA(DisplayName = "Set AD"),
+    ZeroAll=10  UMETA(DisplayName = "Zero All"),
+    ZeroDI=11   UMETA(DisplayName = "Zero DI"),
+    ZeroAD=12   UMETA(DisplayName = "Zero AD")
 };
 
 UCLASS(Blueprintable)
@@ -25,10 +25,10 @@ public:
     void SetNetAddress(FString IP, int32 Port);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void SetEventMode(ENETIOEvent Func);
+    void SetEventMode(TEnumAsByte<ENETIOEvent> Func);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    ENETIOEvent GetEventMode();
+    TEnumAsByte<ENETIOEvent> GetEventMode();
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
     void ZeroDI();

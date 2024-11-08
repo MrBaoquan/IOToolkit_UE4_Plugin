@@ -22,14 +22,14 @@ void UNetIODevice::SetNetAddress(FString IP, int32 Port)
 	SetDO(ChPort, Port, ESetDOType::OAxis);
 }
 
-void UNetIODevice::SetEventMode(ENETIOEvent Func)
+void UNetIODevice::SetEventMode(TEnumAsByte<ENETIOEvent> Func)
 {
-    SetDO(ChFunc, static_cast<int32>(Func), ESetDOType::OAxis);
+    SetDO(ChFunc, (float)Func.GetValue(), ESetDOType::OAxis);
 }
 
-ENETIOEvent UNetIODevice::GetEventMode()
+TEnumAsByte<ENETIOEvent> UNetIODevice::GetEventMode()
 {
-    return static_cast<ENETIOEvent>(GetDO(ChFunc));
+    return static_cast<ENETIOEvent>((int32)GetDO(ChFunc));
 }
 
 void UNetIODevice::ZeroDI()
