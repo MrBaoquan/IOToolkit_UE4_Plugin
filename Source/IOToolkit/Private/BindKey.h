@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "IOToolkit.h"
 #include "BindKey.generated.h"
 
 
@@ -22,15 +23,11 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FKeyDelegatePin IE_Released;
 
-	UFUNCTION(BlueprintCallable,
-		meta = (
-			BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",
-			ToolTip = "订阅按键事件"
-		),
-		Category = "IOToolkit")
-		static UBindKey* IO_SubscribeKey(const UObject* WorldContextObject,
-			FString Device,
-			FString Key);
+	UFUNCTION(BlueprintCallable,meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "订阅按键事件"),Category = "IOToolkit")
+		static UBindKey* IO_SubscribeKey(const UObject* WorldContextObject,FString Device,TEnumAsByte<EIO_Key> Key);
+
+	UFUNCTION(BlueprintCallable,meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "订阅按键事件"),Category = "IOToolkit")
+		static UBindKey* IO_SubscribeKey_S(const UObject* WorldContextObject,FString Device,FString Key);
 
 	virtual void Activate() override;
 
@@ -39,5 +36,6 @@ private:
 	bool Active;
 
 	FString DeviceName;
-	FString KeyName;
+	TEnumAsByte<EIO_Key> Key;
+	FString KeyString;
 };

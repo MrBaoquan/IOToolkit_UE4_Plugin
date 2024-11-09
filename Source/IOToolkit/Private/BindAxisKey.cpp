@@ -6,12 +6,23 @@
 
 namespace io = IOToolkit;
 
-UBindAxisKey* UBindAxisKey::IO_SubscribeAxisKey(const UObject* WorldContextObject, FString Device, FString AxisKey)
+UBindAxisKey* UBindAxisKey::IO_SubscribeAxisKey(const UObject* WorldContextObject, FString Device, TEnumAsByte<EIO_Key> Key)
 {
 	UBindAxisKey* Node = NewObject<UBindAxisKey>();
 	Node->WorldContextObject = WorldContextObject;
 	Node->DeviceName = Device;
-	Node->AxisKeyName = AxisKey;
+	Node->AxisKey = Key;
+	Node->AxisKeyString = "";
+	return Node;
+}
+
+
+UBindAxisKey* UBindAxisKey::IO_SubscribeAxisKey_S(const UObject* WorldContextObject, FString Device, FString Key)
+{
+	UBindAxisKey* Node = NewObject<UBindAxisKey>();
+	Node->WorldContextObject = WorldContextObject;
+	Node->DeviceName = Device;
+	Node->AxisKeyString = Key;
 	return Node;
 }
 
@@ -32,8 +43,12 @@ void UBindAxisKey::Activate()
 
 	Active = true;
 
+	FString keyStr = UEnum::GetValueAsString(AxisKey);
+	if (AxisKeyString != "") {
+		keyStr = AxisKeyString;
+	}
 	io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-		.BindAxisKey(TCHAR_TO_ANSI(*AxisKeyName), [&](float val) {
+		.BindAxisKey(TCHAR_TO_ANSI(*keyStr), [&](float val) {
 		this->Update.Broadcast(val);
 	});
 }

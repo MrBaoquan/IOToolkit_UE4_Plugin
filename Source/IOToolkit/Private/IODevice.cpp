@@ -1,5 +1,6 @@
 #include "IODevice.h"
 #include "NetIODevice.h"
+#include "ModbusDevice.h"
 #include "IOToolkit/include/IODeviceController.h"
 
 namespace io = IOToolkit;
@@ -12,7 +13,7 @@ UIODevice::UIODevice()
 
 UIODevice::~UIODevice()
 {
-    UE_LOG(LogTemp, Warning, TEXT("UIODevice Destructor %s"), *DeviceName);
+    //UE_LOG(LogTemp, Warning, TEXT("UIODevice Destructor %s"), *DeviceName);
 }
 
 TMap<FString, UIODevice*> UIODevice::DeviceMap;
@@ -37,6 +38,9 @@ UIODevice* UIODevice::GetOrCreateIODevice(FString Name)
     UIODevice* NewIODevice = nullptr;
     if (dllName == "NETIO") {
         NewIODevice = NewObject<UNetIODevice>(GetTransientPackage());
+    }
+    else if (dllName == "MODBUS") {
+        NewIODevice = NewObject<UModbusDevice>(GetTransientPackage());
     }
     else {
         NewIODevice = NewObject<UIODevice>(GetTransientPackage());
@@ -66,6 +70,13 @@ void UIODevice::Initialize(FString Name)
     this->DeviceName = Name;
 }
 
+void UIODevice::ClearBingings()
+{
+    auto& _device = io::IODeviceController::Instance()
+        .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
+    _device.ClearBindings();
+}
+
 int32 UIODevice::DOImmediate()
 {
     return io::IODeviceController::Instance()
@@ -73,28 +84,48 @@ int32 UIODevice::DOImmediate()
         .DOImmediate();
 }
 
-void UIODevice::SetDO(FString Target, float Value, TEnumAsByte<ESetDOType::Type> Type)
+void UIODevice::SetDO(FString Name, float Value)
 {
     auto& _device = io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
-    if (Type == ESetDOType::OAction) {
-        _device.SetDO(TCHAR_TO_ANSI(*Target), Value);
-    }
-    else {
-        _device.SetDO(io::FKey(TCHAR_TO_ANSI(*Target)), Value);
-    }
+    _device.SetDO(TCHAR_TO_ANSI(*Name), Value);
 }
 
-float UIODevice::GetDO(FString Target, TEnumAsByte<ESetDOType::Type> Type /*= ESetDOType::OAction*/)
+void UIODevice::SetDOKey(TEnumAsByte<EIO_OAxisKey> Key, float Value)
 {
-	auto& _device = io::IODeviceController::Instance()
-            .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
-    if (Type == ESetDOType::OAction) {
-        return _device.GetDO(TCHAR_TO_ANSI(*Target));
-    }
-    else {
-        return _device.GetDO(io::FKey(TCHAR_TO_ANSI(*Target)));
-    }
+    auto keyText= UEnum::GetValueAsString(Key);
+    auto& _device = io::IODeviceController::Instance()
+        .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
+    _device.SetDO(io::FKey(TCHAR_TO_ANSI(*keyText)), Value);
+}
+
+void UIODevice::SetDOKey_S(FString Key, float Value)
+{
+    auto& _device = io::IODeviceController::Instance()
+        .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
+    _device.SetDO(io::FKey(TCHAR_TO_ANSI(*Key)), Value);
+}
+
+float UIODevice::GetDO(FString Name)
+{
+    auto& _device = io::IODeviceController::Instance()
+        .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
+    return _device.GetDO(TCHAR_TO_ANSI(*Name));
+}
+
+float UIODevice::GetDOKey(TEnumAsByte<EIO_OAxisKey> Key)
+{
+    auto& _device = io::IODeviceController::Instance()
+        .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
+    auto keyText = UEnum::GetValueAsString(Key);
+    return _device.GetDO(io::FKey(TCHAR_TO_ANSI(*keyText)));
+}
+
+float UIODevice::GetDOKey_S(FString Key)
+{
+    auto& _device = io::IODeviceController::Instance()
+        .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
+    return _device.GetDO(io::FKey(TCHAR_TO_ANSI(*Key)));
 }
 
 void UIODevice::SetDOOn(FString OAction)
@@ -111,10 +142,16 @@ void UIODevice::SetDOOff(FString OAction)
         .SetDOOff(TCHAR_TO_ANSI(*OAction));
 }
 
-void UIODevice::BindKey(FString InKey, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback)
+void UIODevice::BindKey(TEnumAsByte<EIO_Key> Key, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback)
+{
+    FString keyStr = UEnum::GetValueAsString(Key);
+    BindKey_S(keyStr, EventType, InCallback);
+}
+
+void UIODevice::BindKey_S(FString Key, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback)
 {
     io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .BindKey(TCHAR_TO_ANSI(*InKey), static_cast<io::InputEvent>(EventType.GetValue()), [=]() {
+        .BindKey(TCHAR_TO_ANSI(*Key), static_cast<io::InputEvent>(EventType.GetValue()), [=]() {
             InCallback.ExecuteIfBound();
         });
 }
@@ -130,13 +167,12 @@ void UIODevice::PropagateDIEvents(UNetIODevice* NetIODevice, int32 StartChannel,
         auto& _extDev = io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*DeviceName));
 
         _extDev.BindKey(io::FKey(TCHAR_TO_ANSI(*InputKey)), io::InputEvent::IE_Pressed, [=]() {
-            NetIODevice->SetButtonPressed(OutputKey);
+            NetIODevice->SetRemoteKeyDown(static_cast<EIO_ButtonKey::Type>(Idx));
          });
 
         _extDev.BindKey(io::FKey(TCHAR_TO_ANSI(*InputKey)), io::InputEvent::IE_Released, [=]() {
-            NetIODevice->SetButtonReleased(OutputKey);
+            NetIODevice->SetRemoteKeyUp(static_cast<EIO_ButtonKey::Type>(Idx));
          });
-
     }
 }
 
@@ -149,50 +185,56 @@ void UIODevice::BindAction(FString InAction, TEnumAsByte<EIOEvent::Type> EventTy
         });
 }
 
-void UIODevice::BindAxisKey(FString InAxisKey, FAxisDelegate InCallback)
+void UIODevice::BindAxisKey(TEnumAsByte<EIO_Key> AxisKey, FAxisDelegate InCallback)
+{
+    FString keyStr = UEnum::GetValueAsString(AxisKey);
+    BindAxisKey_S(keyStr, InCallback);
+}
+
+void UIODevice::BindAxisKey_S(FString Key, FAxisDelegate InCallback)
 {
     io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .BindAxisKey(TCHAR_TO_ANSI(*InAxisKey), [=](float val) {
-        InCallback.ExecuteIfBound(val);
-            });
+        .BindAxisKey(TCHAR_TO_ANSI(*Key), [=](float val) {
+            InCallback.ExecuteIfBound(val);
+        });
 }
 
-void UIODevice::BindAxis(FString InAction, FAxisDelegate InCallback)
+void UIODevice::BindAxis(FString Name, FAxisDelegate InCallback)
 {
     io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .BindAxis(TCHAR_TO_ANSI(*InAction), [=](float val) {
-        InCallback.ExecuteIfBound(val);
-            });
+        .BindAxis(TCHAR_TO_ANSI(*Name), [=](float val) {
+            InCallback.ExecuteIfBound(val);
+        });
 }
 
-bool UIODevice::GetKey(FString InKey)
+bool UIODevice::GetKey(FString Key)
 {
     return io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .GetKey(TCHAR_TO_ANSI(*InKey));
+        .GetKey(TCHAR_TO_ANSI(*Key));
 }
 
-bool UIODevice::GetKeyDown(FString InKey)
+bool UIODevice::GetKeyDown(FString Key)
 {
     return io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .GetKeyDown(TCHAR_TO_ANSI(*InKey));
+        .GetKeyDown(TCHAR_TO_ANSI(*Key));
 }
 
-float UIODevice::GetKeyDownDuration(FString InKey)
+float UIODevice::GetKeyDownDuration(FString Key)
 {
     return io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .GetKeyDownDuration(TCHAR_TO_ANSI(*InKey));
+        .GetKeyDownDuration(TCHAR_TO_ANSI(*Key));
 }
 
-bool UIODevice::GetKeyUp(FString InKey)
+bool UIODevice::GetKeyUp(FString Key)
 {
     return io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .GetKeyUp(TCHAR_TO_ANSI(*InKey));
+        .GetKeyUp(TCHAR_TO_ANSI(*Key));
 }
 
 float UIODevice::GetAxis(FString InAxis)
@@ -202,9 +244,9 @@ float UIODevice::GetAxis(FString InAxis)
         .GetAxis(TCHAR_TO_ANSI(*InAxis));
 }
 
-float UIODevice::GetAxisKey(FString InAxisKey)
+float UIODevice::GetAxisKey(FString AxisKey)
 {
     return io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName))
-        .GetAxisKey(TCHAR_TO_ANSI(*InAxisKey));
+        .GetAxisKey(TCHAR_TO_ANSI(*AxisKey));
 }

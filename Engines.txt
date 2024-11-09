@@ -1,1 +1,2 @@
 UE_4_27|D:\Program Files\Epic Games\UE_4.27
+UE_5_4|D:\Program Files\Epic Games\UE_5.4

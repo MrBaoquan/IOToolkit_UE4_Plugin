@@ -5,7 +5,7 @@
 #include "NetIODevice.generated.h"
 
 UENUM(BlueprintType)
-enum class ENETIOEvent : uint8
+enum ENETIOEvent : uint8
 {
     SetAll=0   UMETA(DisplayName = "Set All"),
     SetDI=1    UMETA(DisplayName = "Set DI"),
@@ -22,7 +22,7 @@ class IOTOOLKIT_API UNetIODevice : public UIODevice
 
 public:
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void SetNetAddress(FString IP, int32 Port);
+    void SetRemoteAddress(FString IP, int32 Port);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
     void SetEventMode(TEnumAsByte<ENETIOEvent> Func);
@@ -31,28 +31,24 @@ public:
     TEnumAsByte<ENETIOEvent> GetEventMode();
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void ZeroDI();
+    void ZeroRemoteDI();
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void ZeroAD();
+    void ZeroRemoteAD();
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void EmmitNetEvent(int32 ChKey);
-    void EmmitNetEvent(FString EvtKey);
+    void EmmitNetEvent(TEnumAsByte<EIO_ButtonKey::Type> chKey);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void SetButtonPressed(int32 Channel);
-    void SetButtonPressed(FString Button);
+    void SetRemoteKeyDown(TEnumAsByte<EIO_ButtonKey::Type> Key);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void SetButtonReleased(int32 Channel);
-    void SetButtonReleased(FString Button);
+    void SetRemoteKeyUp(TEnumAsByte<EIO_ButtonKey::Type> Key);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void SetAxis(int32 Channel, float Value);
-    void SetAxis(FString AxisKey, float Value);
+    void SetRemoteAxis(TEnumAsByte<EIO_AxisKey::Type> Key, float Value);
 
 private:
-    FString ChFunc = TEXT("OAxis_240");
-    FString ChPort = TEXT("OAxis_245");
+    TEnumAsByte<EIO_OAxisKey> ChFunc = OAxis_240;
+    TEnumAsByte<EIO_OAxisKey> ChPort = OAxis_245;
 };

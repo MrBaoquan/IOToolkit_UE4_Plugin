@@ -21,56 +21,78 @@ public:
     static void ClearIODevices();
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    void Initialize(FString Name);
+        void Initialize(FString Name);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    int32 DOImmediate();
+        void ClearBingings();
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    void SetDO(FString Target, float Value, TEnumAsByte<ESetDOType::Type> Type = ESetDOType::OAction);
+        int32 DOImmediate();
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    float GetDO(FString Target, TEnumAsByte<ESetDOType::Type> Type = ESetDOType::OAction);
+        void SetDO(FString Name, float Value);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    void SetDOOn(FString OAction);
+        void SetDOKey(TEnumAsByte<EIO_OAxisKey> Key, float Value);
+    
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        void SetDOKey_S(FString Key, float Value);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    void SetDOOff(FString OAction);
+        float GetDO(FString Name);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    bool GetKey(FString InKey);
+        float GetDOKey(TEnumAsByte<EIO_OAxisKey> Key);
+    
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        float GetDOKey_S(FString Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    bool GetKeyDown(FString InKey);
+        void SetDOOn(FString OAction);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    float GetKeyDownDuration(FString InKey);
+        void SetDOOff(FString OAction);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    bool GetKeyUp(FString InKey);
+        bool GetKey(FString Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    float GetAxis(FString InAxis);
+        bool GetKeyDown(FString Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    float GetAxisKey(FString InAxisKey);
+        float GetKeyDownDuration(FString Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-    void PropagateDIEvents(UNetIODevice* NetIODevice, int32 StartChannel, int32 Count);
+        bool GetKeyUp(FString Key);
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        float GetAxis(FString InAxis);
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        float GetAxisKey(FString AxisKey);
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        void PropagateDIEvents(UNetIODevice* NetIODevice, int32 StartChannel, int32 Count);
 
     UFUNCTION(BlueprintCallable, Category="IOToolkit")
-    void BindKey(FString InKey, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback);
+        void BindKey(TEnumAsByte<EIO_Key> Key, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback);
 
     UFUNCTION(BlueprintCallable, Category="IOToolkit")
-    void BindAction(FString InAction, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegateWithKey InCallback);
+        void BindKey_S(FString Key, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback);
 
     UFUNCTION(BlueprintCallable, Category="IOToolkit")
-    void BindAxisKey(FString InAxisKey, FAxisDelegate InCallback);
+        void BindAction(FString InAction, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegateWithKey InCallback);
 
     UFUNCTION(BlueprintCallable, Category="IOToolkit")
-    void BindAxis(FString InAction, FAxisDelegate InCallback);
+        void BindAxisKey(TEnumAsByte<EIO_Key> Key, FAxisDelegate InCallback);
 
+    UFUNCTION(BlueprintCallable, Category="IOToolkit")
+        void BindAxisKey_S(FString Key, FAxisDelegate InCallback);
+
+    UFUNCTION(BlueprintCallable, Category="IOToolkit")
+        void BindAxis(FString Name, FAxisDelegate InCallback);
+
+    UPROPERTY(BlueprintReadOnly, Category="IOToolkit")
     FString DeviceName;
 protected:
     UIODevice();

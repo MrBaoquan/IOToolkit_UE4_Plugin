@@ -6,7 +6,7 @@
 
 namespace io = IOToolkit;
 
-void UNetIODevice::SetNetAddress(FString IP, int32 Port)
+void UNetIODevice::SetRemoteAddress(FString IP, int32 Port)
 {
 	//bool bIsValid;
 	FIPv4Address IPv4Address;
@@ -14,85 +14,68 @@ void UNetIODevice::SetNetAddress(FString IP, int32 Port)
         UE_LOG(LogTemp, Warning, TEXT("Invalid IP address: %s"), *IP);
         return;
     }
-    SetDO(FString::Printf(TEXT("OAxis_%d"), 241), IPv4Address.A, ESetDOType::OAxis);
-    SetDO(FString::Printf(TEXT("OAxis_%d"), 242), IPv4Address.B, ESetDOType::OAxis);
-    SetDO(FString::Printf(TEXT("OAxis_%d"), 243), IPv4Address.C, ESetDOType::OAxis);
-    SetDO(FString::Printf(TEXT("OAxis_%d"), 244), IPv4Address.D, ESetDOType::OAxis);
 
-	SetDO(ChPort, Port, ESetDOType::OAxis);
+    SetDOKey(OAxis_241, IPv4Address.A);
+    SetDOKey(OAxis_242, IPv4Address.B);
+    SetDOKey(OAxis_243, IPv4Address.C);
+    SetDOKey(OAxis_244, IPv4Address.D);
+
+    
+	SetDOKey(ChPort, Port);
 }
 
 void UNetIODevice::SetEventMode(TEnumAsByte<ENETIOEvent> Func)
 {
-    SetDO(ChFunc, (float)Func.GetValue(), ESetDOType::OAxis);
+    SetDOKey(ChFunc, (float)Func.GetValue());
 }
 
 TEnumAsByte<ENETIOEvent> UNetIODevice::GetEventMode()
 {
-    return static_cast<ENETIOEvent>((int32)GetDO(ChFunc));
+    return static_cast<ENETIOEvent>((int32)GetDOKey(ChFunc));
 }
 
-void UNetIODevice::ZeroDI()
+void UNetIODevice::ZeroRemoteDI()
 {
     SetEventMode(ENETIOEvent::ZeroDI);
     DOImmediate();
 }
 
-void UNetIODevice::ZeroAD()
+void UNetIODevice::ZeroRemoteAD()
 {
     SetEventMode(ENETIOEvent::ZeroAD);
     DOImmediate();
 }
 
-void UNetIODevice::EmmitNetEvent(int32 ChKey)
+void UNetIODevice::EmmitNetEvent(TEnumAsByte<EIO_ButtonKey::Type> chKey)
 {
-    EmmitNetEvent(FString::Printf(TEXT("OAxis_%02d"), ChKey));
+    
+    SetEventMode(ENETIOEvent::SetDI);
+
+    EIO_OAxisKey chOKey = static_cast<EIO_OAxisKey>(chKey.GetIntValue());
+    SetDOKey(chOKey, 1);
+    DOImmediate();
+    SetDOKey(chOKey, 0);
+    DOImmediate();
 }
 
-void UNetIODevice::EmmitNetEvent(FString EvtKey)
+void UNetIODevice::SetRemoteKeyDown(TEnumAsByte<EIO_ButtonKey::Type> Key)
 {
     SetEventMode(ENETIOEvent::SetDI);
-    SetDO(EvtKey, 1, ESetDOType::OAxis);
-    DOImmediate();
-    SetDO(EvtKey, 0, ESetDOType::OAxis);
+    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetIntValue()), 1);
     DOImmediate();
 }
 
-void UNetIODevice::SetButtonPressed(int32 Channel)
-{
-    FString Button = FString::Printf(TEXT("Button_%02d"), Channel);
-    SetButtonPressed(Button);
-}
-
-void UNetIODevice::SetButtonPressed(FString Button)
+void UNetIODevice::SetRemoteKeyUp(TEnumAsByte<EIO_ButtonKey::Type> Key)
 {
     SetEventMode(ENETIOEvent::SetDI);
-    SetDO(Button, 1, ESetDOType::OAxis);
+    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetIntValue()), 0);
     DOImmediate();
+
 }
 
-void UNetIODevice::SetButtonReleased(int32 Channel)
-{
-    FString Button = FString::Printf(TEXT("Button_%02d"), Channel);
-    SetButtonReleased(Button);
-}
-
-void UNetIODevice::SetButtonReleased(FString Button)
-{
-    SetEventMode(ENETIOEvent::SetDI);
-    SetDO(Button, 0, ESetDOType::OAxis);
-    DOImmediate();
-}
-
-void UNetIODevice::SetAxis(int32 Channel, float Value)
-{
-    FString AxisKey = FString::Printf(TEXT("OAxis_%02d"), Channel);
-    SetAxis(AxisKey, Value);
-}
-
-void UNetIODevice::SetAxis(FString AxisKey, float Value)
+void UNetIODevice::SetRemoteAxis(TEnumAsByte<EIO_AxisKey::Type> Key, float Value)
 {
     SetEventMode(ENETIOEvent::SetAD);
-    SetDO(AxisKey, Value, ESetDOType::OAxis);
+    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetIntValue()), Value);
     DOImmediate();
 }

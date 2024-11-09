@@ -6,12 +6,23 @@
 
 namespace io = IOToolkit;
 
-UBindKey* UBindKey::IO_SubscribeKey(const UObject* WorldContextObject, FString Device, FString Key)
+UBindKey* UBindKey::IO_SubscribeKey(const UObject* WorldContextObject, FString Device, TEnumAsByte<EIO_Key> Key)
 {
 	UBindKey* Node = NewObject<UBindKey>();
 	Node->WorldContextObject = WorldContextObject;
 	Node->DeviceName = Device;
-	Node->KeyName = Key;
+	Node->Key = Key;
+	Node->KeyString = "";
+	return Node;
+}
+
+
+UBindKey* UBindKey::IO_SubscribeKey_S(const UObject* WorldContextObject, FString Device, FString Key)
+{
+	UBindKey* Node = NewObject<UBindKey>();
+	Node->WorldContextObject = WorldContextObject;
+	Node->DeviceName = Device;
+	Node->KeyString = Key;
 	return Node;
 }
 
@@ -33,11 +44,16 @@ void UBindKey::Activate()
 	Active = true;
 	auto& _device = io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*DeviceName));
 
-	_device.BindKey(TCHAR_TO_ANSI(*KeyName), io::IE_Pressed, [&]() {
+	FString keyStr = UEnum::GetValueAsString(Key);
+	if (KeyString != "") {
+		keyStr = KeyString;
+	}
+
+	_device.BindKey(TCHAR_TO_ANSI(*keyStr), io::IE_Pressed, [&]() {
 		this->IE_Pressed.Broadcast();
 	});
 
-	_device.BindKey(TCHAR_TO_ANSI(*KeyName), io::IE_Released, [&]() {
+	_device.BindKey(TCHAR_TO_ANSI(*keyStr), io::IE_Released, [&]() {
 		this->IE_Released.Broadcast();
 	});
 }

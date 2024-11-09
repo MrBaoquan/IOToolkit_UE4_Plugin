@@ -77,8 +77,7 @@ public class IOToolkit : ModuleRules {
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "NetWorking",
-                "Sockets"
+                "Networking"
                 // ... add private dependencies that you statically link with here ...	
             }
         );

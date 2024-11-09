@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "IOToolkit.h"
 #include "BindAxisKey.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAxisKeyDelegatePin, float, AxisValue);
@@ -18,14 +19,11 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FAxisKeyDelegatePin Update;
 
-	UFUNCTION(BlueprintCallable,
-		meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",
-			ToolTip = "订阅轴键事件",
-			Category = "IOToolkit"
-		)
-	)
-		static UBindAxisKey* IO_SubscribeAxisKey(const UObject* WorldContextObject,
-			FString Device, FString AxisKey);
+	UFUNCTION(BlueprintCallable,meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "订阅轴键事件",Category = "IOToolkit"))
+		static UBindAxisKey* IO_SubscribeAxisKey(const UObject* WorldContextObject,FString Device, TEnumAsByte<EIO_Key> Key);
+	
+	UFUNCTION(BlueprintCallable,meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "订阅轴键事件",Category = "IOToolkit"))
+		static UBindAxisKey* IO_SubscribeAxisKey_S(const UObject* WorldContextObject, FString Device, FString Key);
 
 	virtual void Activate() override;
 
@@ -34,6 +32,6 @@ private:
 	bool Active;
 
 	FString DeviceName;
-	FString AxisKeyName;
-	
+	TEnumAsByte<EIO_Key> AxisKey;
+	FString AxisKeyString;
 };
