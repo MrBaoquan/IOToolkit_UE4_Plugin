@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -23,12 +23,7 @@ public:
 			FActionDelegatePin IE_Released;
 
 		UFUNCTION(BlueprintCallable,
-			meta = (
-				BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",
-				ToolTip = "¶©ÔÄ¶¯×÷ÊÂ¼þ",
-				Category = "IOToolkit"
-			)
-		)
+			meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "è®¢é˜…åŠ¨ä½œäº‹ä»¶",Category = "IOToolkit"))
 			static UBindAction* IO_SubscribeAction(const UObject* WorldContextObject,
 				FString Device,
 				FString Action);

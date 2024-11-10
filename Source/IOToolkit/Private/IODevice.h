@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "IOToolkit.h"
+#include "IOTypes.h"
 #include "IODevice.generated.h"
 
 UCLASS(Blueprintable)
@@ -54,22 +54,38 @@ public:
         void SetDOOff(FString OAction);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-        bool GetKey(FString Key);
+        bool GetKey(TEnumAsByte<EIO_Key> Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-        bool GetKeyDown(FString Key);
+        bool GetKey_S(FString Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-        float GetKeyDownDuration(FString Key);
+        bool GetKeyDown(TEnumAsByte<EIO_Key> Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-        bool GetKeyUp(FString Key);
+        bool GetKeyDown_S(FString Key);
+
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        float GetKeyDownDuration(TEnumAsByte<EIO_Key> Key);
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        float GetKeyDownDuration_S(FString Key);
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        bool GetKeyUp(TEnumAsByte<EIO_Key> Key);
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        bool GetKeyUp_S(FString Key);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
         float GetAxis(FString InAxis);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
-        float GetAxisKey(FString AxisKey);
+        float GetAxisKey(TEnumAsByte<EIO_Key> AxisKey);
+
+    UFUNCTION(BlueprintCallable, Category = "IOToolkit")
+        float GetAxisKey_S(FString AxisKey);
 
     UFUNCTION(BlueprintCallable, Category = "IOToolkit")
         void PropagateDIEvents(UNetIODevice* NetIODevice, int32 StartChannel, int32 Count);

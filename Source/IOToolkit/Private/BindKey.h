@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
-#include "IOToolkit.h"
+#include "IOTypes.h"
 #include "BindKey.generated.h"
 
 
@@ -24,7 +24,7 @@ public:
 		FKeyDelegatePin IE_Released;
 
 	UFUNCTION(BlueprintCallable,meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "订阅按键事件"),Category = "IOToolkit")
-		static UBindKey* IO_SubscribeKey(const UObject* WorldContextObject,FString Device,TEnumAsByte<EIO_Key> Key);
+		static UBindKey* IO_SubscribeKey(const UObject* WorldContextObject,FString Device, TEnumAsByte<EIO_Key> Key);
 
 	UFUNCTION(BlueprintCallable,meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "订阅按键事件"),Category = "IOToolkit")
 		static UBindKey* IO_SubscribeKey_S(const UObject* WorldContextObject,FString Device,FString Key);

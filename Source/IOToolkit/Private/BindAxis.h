@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -19,14 +19,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FAxisDelegatePin Update;
 
-	UFUNCTION(BlueprintCallable,
-		meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",
-			ToolTip = "¶©ÔÄÖáÊÂ¼þ",
-			Category = "IOToolkit"
-		)
-	)
-		static UBindAxis* IO_SubscribeAxis(const UObject* WorldContextObject, 
-			FString Device, FString Axis);
+	UFUNCTION(BlueprintCallable,meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject",ToolTip = "è®¢é˜…è½´äº‹ä»¶",Category = "IOToolkit"))
+		static UBindAxis* IO_SubscribeAxis(const UObject* WorldContextObject, FString Device, FString Axis);
 
 	virtual void Activate() override;
 	

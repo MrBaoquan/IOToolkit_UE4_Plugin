@@ -93,22 +93,22 @@ float UIOToolkit_BPF::IO_GetDOKey_S(FString Device, FString Key)
 
 bool UIOToolkit_BPF::IO_GetKey(FString Device, FString Key)
 {
-	return IO_GetDevice(Device)->GetKey(Key);
+	return IO_GetDevice(Device)->GetKey_S(Key);
 }
 
 bool UIOToolkit_BPF::IO_GetKeyDown(FString Device, FString Key)
 {
-	return IO_GetDevice(Device)->GetKeyDown(Key);
+	return IO_GetDevice(Device)->GetKeyDown_S(Key);
 }
 
 float UIOToolkit_BPF::IO_GetKeyDownDuration(FString Device, FString Key)
 {
-	return IO_GetDevice(Device)->GetKeyDownDuration(Key);
+	return IO_GetDevice(Device)->GetKeyDownDuration_S(Key);
 }
 
 bool UIOToolkit_BPF::IO_GetKeyUp(FString Device, FString Key)
 {
-	return IO_GetDevice(Device)->GetKeyUp(Key);
+	return IO_GetDevice(Device)->GetKeyUp_S(Key);
 }
 
 float UIOToolkit_BPF::IO_GetAxis(FString Device, FString InAxis)
@@ -120,5 +120,5 @@ float UIOToolkit_BPF::IO_GetAxis(FString Device, FString InAxis)
 
 float UIOToolkit_BPF::IO_GetAxisKey(FString Device, FString AxisKey)
 {
-	return IO_GetDevice(Device)->GetAxisKey(AxisKey);
+	return IO_GetDevice(Device)->GetAxisKey_S(AxisKey);
 }

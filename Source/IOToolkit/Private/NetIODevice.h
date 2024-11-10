@@ -25,7 +25,7 @@ public:
     void SetRemoteAddress(FString IP, int32 Port);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
-    void SetEventMode(TEnumAsByte<ENETIOEvent> Func);
+    void SetEventMode(TEnumAsByte<ENETIOEvent> EvtMode);
 
     UFUNCTION(BlueprintCallable, Category = "NetIO")
     TEnumAsByte<ENETIOEvent> GetEventMode();
