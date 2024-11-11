@@ -51,7 +51,7 @@ void UNetIODevice::EmmitNetEvent(TEnumAsByte<EIO_ButtonKey::Type> chKey)
     
     SetEventMode(ENETIOEvent::SetDI);
 
-    EIO_OAxisKey chOKey = static_cast<EIO_OAxisKey>(chKey.GetIntValue());
+    EIO_OAxisKey chOKey = static_cast<EIO_OAxisKey>(chKey.GetValue());
     SetDOKey(chOKey, 1);
     DOImmediate();
     SetDOKey(chOKey, 0);
@@ -61,14 +61,14 @@ void UNetIODevice::EmmitNetEvent(TEnumAsByte<EIO_ButtonKey::Type> chKey)
 void UNetIODevice::SetRemoteKeyDown(TEnumAsByte<EIO_ButtonKey::Type> Key)
 {
     SetEventMode(ENETIOEvent::SetDI);
-    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetIntValue()), 1);
+    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetValue()), 1);
     DOImmediate();
 }
 
 void UNetIODevice::SetRemoteKeyUp(TEnumAsByte<EIO_ButtonKey::Type> Key)
 {
     SetEventMode(ENETIOEvent::SetDI);
-    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetIntValue()), 0);
+    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetValue()), 0);
     DOImmediate();
 
 }
@@ -76,6 +76,6 @@ void UNetIODevice::SetRemoteKeyUp(TEnumAsByte<EIO_ButtonKey::Type> Key)
 void UNetIODevice::SetRemoteAxis(TEnumAsByte<EIO_AxisKey::Type> Key, float Value)
 {
     SetEventMode(ENETIOEvent::SetAD);
-    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetIntValue()), Value);
+    SetDOKey(static_cast<EIO_OAxisKey>(Key.GetValue()), Value);
     DOImmediate();
 }

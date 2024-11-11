@@ -5,7 +5,7 @@
 #include "NetIODevice.generated.h"
 
 UENUM(BlueprintType)
-enum ENETIOEvent : uint8
+enum ENETIOEvent
 {
     SetAll=0   UMETA(DisplayName = "Set All"),
     SetDI=1    UMETA(DisplayName = "Set DI"),

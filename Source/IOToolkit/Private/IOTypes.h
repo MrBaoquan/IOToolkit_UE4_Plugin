@@ -515,7 +515,7 @@ namespace EIO_ButtonKey
 UENUM(BlueprintType)
 namespace EIO_AxisKey 
 {
-    enum Type : uint8
+    enum Type
     {
         Axis_00 = 0,
         Axis_01,
@@ -778,7 +778,7 @@ namespace EIO_AxisKey
 
 
 UENUM(BlueprintType)
-enum EIO_OAxisKey : uint8
+enum EIO_OAxisKey
 {
     OAxis_00 = 0,
     OAxis_01,
