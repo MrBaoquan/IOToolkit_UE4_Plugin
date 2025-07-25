@@ -22,7 +22,7 @@ void UActTrackDevice::NotifyButton(int buttonID)
 
 void UActTrackDevice::NotifyInput(TEnumAsByte<EInputType> inputType, int inputID)
 {
-	auto _val = inputType.GetIntValue();
+	auto _val = inputType.GetValue();
 	EIO_OAxisKey _key = static_cast<EIO_OAxisKey>(_val);
 	SetDOKey(_key, inputID);
 	this->DOImmediate();

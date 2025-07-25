@@ -3,7 +3,7 @@
 set root_dir=%cd%\
 set output_dir=%root_dir%Release\
 
-set version=2.3.1
+set version=2.4.1
 
 setlocal EnableDelayedExpansion 
 
