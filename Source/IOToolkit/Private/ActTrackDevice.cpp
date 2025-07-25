@@ -20,10 +20,9 @@ void UActTrackDevice::NotifyButton(int buttonID)
 	NotifyInput(EInputType::Button, buttonID);
 }
 
-void UActTrackDevice::NotifyInput(TEnumAsByte<EInputType> inputType, int inputID)
+void UActTrackDevice::NotifyInput(EInputType inputType, int inputID)
 {
-	auto _val = inputType.GetValue();
-	EIO_OAxisKey _key = static_cast<EIO_OAxisKey>(_val);
+	EIO_OAxisKey _key = static_cast<EIO_OAxisKey>(static_cast<int>(inputType));
 	SetDOKey(_key, inputID);
 	this->DOImmediate();
 }

@@ -48,7 +48,7 @@ public:
 	void NotifyButton(int buttonID = 1);
 
 	UFUNCTION(BlueprintCallable, Category = "ActTrack")
-	void NotifyInput(TEnumAsByte<EInputType> inputType, int inputID);
+	void NotifyInput(EInputType inputType, int inputID);
 
     UFUNCTION(BlueprintCallable, Category = "ActTrack")
     void NotifyAlarm(int alarmID = 1);
