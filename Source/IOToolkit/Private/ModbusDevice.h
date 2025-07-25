@@ -15,14 +15,19 @@ class UModbusDevice : public UIODevice
 	GENERATED_BODY()
 	
 public:
-	
 	UFUNCTION(BlueprintCallable, Category = "Modbus")
-		void SetSlaveID(int Address);
+	void SwitchWriteCoilFuncCode();
+
+	UFUNCTION(BlueprintCallable, Category = "Modbus")
+	void SwitchWriteRegisterFuncCode();
 
 	UFUNCTION(BlueprintCallable, Category = "Modbus")
 		void WriteCoil(int Address, bool Value);
 
 	UFUNCTION(BlueprintCallable, Category = "Modbus")
 		void WriteRegister(int Address, int Value);
+private:
+
+	void SetWriteFuncCode(int funCode);
 
 };

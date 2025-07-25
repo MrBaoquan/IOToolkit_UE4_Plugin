@@ -2,7 +2,7 @@
 
 #include "IOToolkit_BPF.h"
 #include "IODevice.h"
-#include "IOToolkit/include/IODeviceController.h"
+#include "IODeviceController.h"
 namespace io = IOToolkit;
 
 void UIOToolkit_BPF::IO_Load()

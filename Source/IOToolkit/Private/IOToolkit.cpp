@@ -5,7 +5,7 @@
 #include "Runtime/Launch/Resources/Version.h"
 
 
-#include "IOToolkit/include/IODeviceController.h"
+#include "IODeviceController.h"
 
 #define LOCTEXT_NAMESPACE "FIOToolkitModule"
 

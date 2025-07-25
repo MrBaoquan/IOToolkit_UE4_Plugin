@@ -3,27 +3,33 @@
 
 #include "ModbusDevice.h"
 
-void UModbusDevice::SetSlaveID(int Address)
+void UModbusDevice::SwitchWriteCoilFuncCode()
 {
-	SetDOKey(OAxis_00, 1);
-	SetDOKey(OAxis_01, Address);
-	DOImmediate();
+	SetWriteFuncCode(5);
+}
+
+void UModbusDevice::SwitchWriteRegisterFuncCode()
+{
+	SetWriteFuncCode(6);
 }
 
 void UModbusDevice::WriteCoil(int Address, bool Value)
 {
-	SetDOKey(OAxis_00, 2);
-	SetDOKey(OAxis_01, 5);
-	SetDOKey(OAxis_02, Address);
-	SetDOKey(OAxis_03, Value ? 1 : 0);
+	SetDOKey(OAxis_240, 1);
+	SetDOKey(OAxis_241, Address);
+	SetDOKey(OAxis_242, Value);
 	DOImmediate();
 }
 
 void UModbusDevice::WriteRegister(int Address, int Value)
 {
-	SetDOKey(OAxis_00, 2);
-	SetDOKey(OAxis_01, 6);
-	SetDOKey(OAxis_02, Address);
-	SetDOKey(OAxis_03, Value);
+	SetDOKey(OAxis_240, 2);
+	SetDOKey(OAxis_241, Address);
+	SetDOKey(OAxis_242, Value);
 	DOImmediate();
+}
+
+void UModbusDevice::SetWriteFuncCode(int funCode)
+{
+	SetDOKey(OAxis_250, funCode);
 }

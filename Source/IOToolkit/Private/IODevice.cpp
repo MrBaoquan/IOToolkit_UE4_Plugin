@@ -1,7 +1,8 @@
 ﻿#include "IODevice.h"
 #include "NetIODevice.h"
 #include "ModbusDevice.h"
-#include "IOToolkit/include/IODeviceController.h"
+#include "ActTrackDevice.h"
+#include "IODeviceController.h"
 
 namespace io = IOToolkit;
 
@@ -32,6 +33,7 @@ UIODevice* UIODevice::GetOrCreateIODevice(FString Name)
 
     auto& _device = io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*Name));
     FString dllName = _device.DllName();
+    dllName = dllName.ToUpper();
     FString ioType = _device.IOType();
     int32 idx = _device.Index();
 
@@ -41,6 +43,9 @@ UIODevice* UIODevice::GetOrCreateIODevice(FString Name)
     }
     else if (dllName == "MODBUS") {
         NewIODevice = NewObject<UModbusDevice>(GetTransientPackage());
+    }
+    else if (dllName == "ACTTRACK") {
+        NewIODevice = NewObject< UActTrackDevice>(GetTransientPackage());
     }
     else {
         NewIODevice = NewObject<UIODevice>(GetTransientPackage());

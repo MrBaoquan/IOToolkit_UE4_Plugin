@@ -29,7 +29,7 @@ public class IOToolkit : ModuleRules {
         PublicIncludePaths.AddRange (
             new string[] {
                 Path.Combine (pluginDir, "Source/IOToolkit/Public"),
-                Path.Combine (pluginDir, "ThirdParty")
+                Path.Combine (pluginDir, "ThirdParty/IOToolkit/include")
                 // ... add public include paths required here ...
             }
         );

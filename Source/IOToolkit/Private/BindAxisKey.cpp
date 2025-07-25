@@ -2,7 +2,7 @@
 
 
 #include "BindAxisKey.h"
-#include "IOToolkit/include/IODeviceController.h"
+#include "IODeviceController.h"
 
 namespace io = IOToolkit;
 

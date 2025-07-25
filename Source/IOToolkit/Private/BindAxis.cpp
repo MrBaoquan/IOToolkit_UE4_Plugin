@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BindAxis.h"
-#include "IOToolkit/include/IODeviceController.h"
+#include "IODeviceController.h"
 
 namespace io = IOToolkit;
 
