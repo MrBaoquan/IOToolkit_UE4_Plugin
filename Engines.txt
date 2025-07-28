@@ -1,3 +1,1 @@
 IOToolkit@UE4.27|D:\Program Files\Epic Games\UE_4.27
-IOToolkit@UE5.0|D:\Program Files\Epic Games\UE_5.0
-IOToolkit@UE5.4|D:\Program Files\Epic Games\UE_5.4

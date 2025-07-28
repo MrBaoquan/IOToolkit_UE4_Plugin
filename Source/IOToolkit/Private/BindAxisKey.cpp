@@ -1,8 +1,10 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "BindAxisKey.h"
 #include "IODeviceController.h"
+#include "Runtime/Launch/Resources/Version.h"
+#include "Misc/EngineVersionComparison.h"
 
 namespace io = IOToolkit;
 
@@ -42,8 +44,11 @@ void UBindAxisKey::Activate()
 	}
 
 	Active = true;
-
+#if UE_VERSION_NEWER_THAN(4,24,0)
 	FString keyStr = UEnum::GetValueAsString(AxisKey);
+#else
+	FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), AxisKey);
+#endif
 	if (AxisKeyString != "") {
 		keyStr = AxisKeyString;
 	}

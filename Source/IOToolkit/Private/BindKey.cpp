@@ -3,6 +3,8 @@
 
 #include "BindKey.h"
 #include "IODeviceController.h"
+#include "Runtime/Launch/Resources/Version.h"
+#include "Misc/EngineVersionComparison.h"
 
 namespace io = IOToolkit;
 
@@ -44,7 +46,13 @@ void UBindKey::Activate()
 	Active = true;
 	auto& _device = io::IODeviceController::Instance().GetIODevice(TCHAR_TO_ANSI(*DeviceName));
 
+
+#if UE_VERSION_NEWER_THAN(4,24,0)
 	FString keyStr = UEnum::GetValueAsString(Key);
+#else
+	FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+#endif
+
 	if (KeyString != "") {
 		keyStr = KeyString;
 	}

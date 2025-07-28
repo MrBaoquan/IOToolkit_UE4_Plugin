@@ -3,6 +3,8 @@
 #include "ModbusDevice.h"
 #include "ActTrackDevice.h"
 #include "IODeviceController.h"
+#include "Runtime/Launch/Resources/Version.h"
+#include "Misc/EngineVersionComparison.h"
 
 namespace io = IOToolkit;
 
@@ -98,7 +100,13 @@ void UIODevice::SetDO(FString Name, float Value)
 
 void UIODevice::SetDOKey(TEnumAsByte<EIO_OAxisKey> Key, float Value)
 {
-    auto keyText= UEnum::GetValueAsString(Key);
+
+#if UE_VERSION_NEWER_THAN(4,24,0)
+    FString keyText = UEnum::GetValueAsString(Key);
+#else
+    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+#endif
+
     auto& _device = io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
     _device.SetDO(io::FKey(TCHAR_TO_ANSI(*keyText)), Value);
@@ -122,7 +130,13 @@ float UIODevice::GetDOKey(TEnumAsByte<EIO_OAxisKey> Key)
 {
     auto& _device = io::IODeviceController::Instance()
         .GetIODevice(TCHAR_TO_ANSI(*DeviceName));
-    auto keyText = UEnum::GetValueAsString(Key);
+    
+#if UE_VERSION_NEWER_THAN(4,24,0)
+    FString keyText = UEnum::GetValueAsString(Key);
+#else
+    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+#endif
+
     return _device.GetDO(io::FKey(TCHAR_TO_ANSI(*keyText)));
 }
 
@@ -150,12 +164,24 @@ void UIODevice::SetDOOff(FString OAction)
 
 bool UIODevice::GetKey(TEnumAsByte<EIO_Key> Key)
 {
+#if UE_VERSION_NEWER_THAN(4,24,0)
     return GetKey_S(UEnum::GetValueAsString(Key));
+#else
+    return GetKey_S(UEnum::GetValueAsString(TEXT("EIO_Key"), Key));
+#endif
+
+
 }
 
 void UIODevice::BindKey(TEnumAsByte<EIO_Key> Key, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback)
 {
+
+#if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyStr = UEnum::GetValueAsString(Key);
+#else
+    FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+#endif
+
     BindKey_S(keyStr, EventType, InCallback);
 }
 
@@ -198,7 +224,11 @@ void UIODevice::BindAction(FString InAction, TEnumAsByte<EIOEvent::Type> EventTy
 
 void UIODevice::BindAxisKey(TEnumAsByte<EIO_Key> AxisKey, FAxisDelegate InCallback)
 {
+#if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyStr = UEnum::GetValueAsString(AxisKey);
+#else
+    FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), AxisKey);
+#endif
     BindAxisKey_S(keyStr, InCallback);
 }
 
@@ -230,7 +260,12 @@ bool UIODevice::GetKey_S(FString Key)
 
 bool UIODevice::GetKeyDown(TEnumAsByte<EIO_Key> Key)
 {
-    return GetKeyDown_S(UEnum::GetValueAsString(Key));
+#if UE_VERSION_NEWER_THAN(4,24,0)
+    FString keyText = UEnum::GetValueAsString(Key);
+#else
+    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+#endif
+    return GetKeyDown_S(keyText);
 }
 
 bool UIODevice::GetKeyDown_S(FString Key)
@@ -243,7 +278,12 @@ bool UIODevice::GetKeyDown_S(FString Key)
 
 float UIODevice::GetKeyDownDuration(TEnumAsByte<EIO_Key> Key)
 {
-    return GetKeyDownDuration_S(UEnum::GetValueAsString(Key));
+#if UE_VERSION_NEWER_THAN(4,24,0)
+    FString keyText = UEnum::GetValueAsString(Key);
+#else
+    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+#endif
+    return GetKeyDownDuration_S(keyText);
 }
 
 float UIODevice::GetKeyDownDuration_S(FString Key)
@@ -256,7 +296,12 @@ float UIODevice::GetKeyDownDuration_S(FString Key)
 
 bool UIODevice::GetKeyUp(TEnumAsByte<EIO_Key> Key)
 {
-    return GetKeyUp_S(UEnum::GetValueAsString(Key));
+#if UE_VERSION_NEWER_THAN(4,24,0)
+    FString keyText = UEnum::GetValueAsString(Key);
+#else
+    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+#endif
+    return GetKeyUp_S(keyText);
 }
 
 bool UIODevice::GetKeyUp_S(FString Key)
@@ -276,7 +321,12 @@ float UIODevice::GetAxis(FString InAxis)
 
 float UIODevice::GetAxisKey(TEnumAsByte<EIO_Key> AxisKey)
 {
-    return GetAxisKey_S(UEnum::GetValueAsString(AxisKey));
+#if UE_VERSION_NEWER_THAN(4,24,0)
+    FString keyText = UEnum::GetValueAsString(AxisKey);
+#else
+    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), AxisKey);
+#endif
+    return GetAxisKey_S(keyText);
 }
 
 float UIODevice::GetAxisKey_S(FString AxisKey)

@@ -1,7 +1,7 @@
 @echo off
 
 set root_dir=%cd%\
-set output_dir=%root_dir%Release\
+set output_dir=%root_dir%..\IOToolkit-UE\
 
 set version=2.4.1
 
