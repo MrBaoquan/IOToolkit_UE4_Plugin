@@ -41,16 +41,32 @@ UIODevice* UIODevice::GetOrCreateIODevice(FString Name)
 
     UIODevice* NewIODevice = nullptr;
     if (dllName == "NETIO") {
-        NewIODevice = NewObject<UNetIODevice>(GetTransientPackage());
+#if UE_VERSION_NEWER_THAN(4,24,0)
+		NewIODevice = NewObject<UNetIODevice>(GetTransientPackage());
+#else
+		NewIODevice = NewObject<UNetIODevice>(nullptr, NAME_None, RF_NoFlags);
+#endif
     }
     else if (dllName == "MODBUS") {
-        NewIODevice = NewObject<UModbusDevice>(GetTransientPackage());
+#if UE_VERSION_NEWER_THAN(4,24,0)
+		NewIODevice = NewObject<UModbusDevice>(GetTransientPackage());
+#else
+		NewIODevice = NewObject<UModbusDevice>(nullptr, NAME_None, RF_NoFlags);
+#endif
     }
     else if (dllName == "ACTTRACK") {
-        NewIODevice = NewObject< UActTrackDevice>(GetTransientPackage());
+#if UE_VERSION_NEWER_THAN(4,24,0)
+        NewIODevice = NewObject<UActTrackDevice>(GetTransientPackage());
+#else
+        NewIODevice = NewObject<UActTrackDevice>(nullptr, NAME_None, RF_NoFlags);
+#endif
     }
     else {
+#if UE_VERSION_NEWER_THAN(4,24,0)
         NewIODevice = NewObject<UIODevice>(GetTransientPackage());
+#else
+        NewIODevice = NewObject<UIODevice>(nullptr, NAME_None, RF_NoFlags);
+#endif
     }
 
     // 创建新设备实例，指定Outer以管理生命周期
