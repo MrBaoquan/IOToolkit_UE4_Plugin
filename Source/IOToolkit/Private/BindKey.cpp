@@ -50,7 +50,7 @@ void UBindKey::Activate()
 #if UE_VERSION_NEWER_THAN(4,24,0)
 	FString keyStr = UEnum::GetValueAsString(Key);
 #else
-	FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+	FString keyStr = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), Key);
 #endif
 
 	if (KeyString != "") {

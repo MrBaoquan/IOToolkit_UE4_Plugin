@@ -47,7 +47,7 @@ void UBindAxisKey::Activate()
 #if UE_VERSION_NEWER_THAN(4,24,0)
 	FString keyStr = UEnum::GetValueAsString(AxisKey);
 #else
-	FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), AxisKey);
+	FString keyStr = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), AxisKey);
 #endif
 	if (AxisKeyString != "") {
 		keyStr = AxisKeyString;

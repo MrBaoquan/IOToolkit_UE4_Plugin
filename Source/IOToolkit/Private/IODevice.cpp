@@ -44,33 +44,32 @@ UIODevice* UIODevice::GetOrCreateIODevice(FString Name)
 #if UE_VERSION_NEWER_THAN(4,24,0)
 		NewIODevice = NewObject<UNetIODevice>(GetTransientPackage());
 #else
-		NewIODevice = NewObject<UNetIODevice>(nullptr, NAME_None, RF_NoFlags);
+		NewIODevice = NewObject<UNetIODevice>((UObject*)GetTransientPackage());
 #endif
     }
     else if (dllName == "MODBUS") {
 #if UE_VERSION_NEWER_THAN(4,24,0)
 		NewIODevice = NewObject<UModbusDevice>(GetTransientPackage());
 #else
-		NewIODevice = NewObject<UModbusDevice>(nullptr, NAME_None, RF_NoFlags);
+		NewIODevice = NewObject<UModbusDevice>((UObject*)GetTransientPackage());
 #endif
     }
     else if (dllName == "ACTTRACK") {
 #if UE_VERSION_NEWER_THAN(4,24,0)
         NewIODevice = NewObject<UActTrackDevice>(GetTransientPackage());
 #else
-        NewIODevice = NewObject<UActTrackDevice>(nullptr, NAME_None, RF_NoFlags);
+        NewIODevice = NewObject<UActTrackDevice>((UObject*)GetTransientPackage());
 #endif
     }
     else {
 #if UE_VERSION_NEWER_THAN(4,24,0)
         NewIODevice = NewObject<UIODevice>(GetTransientPackage());
 #else
-        NewIODevice = NewObject<UIODevice>(nullptr, NAME_None, RF_NoFlags);
+        NewIODevice = NewObject<UIODevice>((UObject*)GetTransientPackage());
 #endif
     }
 
-    // 创建新设备实例，指定Outer以管理生命周期
-    
+    // 创建新设备实例，指定Outer以管理生命周期    
     NewIODevice->AddToRoot();
     NewIODevice->Initialize(Name);
 
@@ -120,7 +119,7 @@ void UIODevice::SetDOKey(TEnumAsByte<EIO_OAxisKey> Key, float Value)
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyText = UEnum::GetValueAsString(Key);
 #else
-    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+    FString keyText = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_OAxisKey"), Key);
 #endif
 
     auto& _device = io::IODeviceController::Instance()
@@ -150,7 +149,7 @@ float UIODevice::GetDOKey(TEnumAsByte<EIO_OAxisKey> Key)
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyText = UEnum::GetValueAsString(Key);
 #else
-    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+    FString keyText = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_OAxisKey"), Key);
 #endif
 
     return _device.GetDO(io::FKey(TCHAR_TO_ANSI(*keyText)));
@@ -181,12 +180,11 @@ void UIODevice::SetDOOff(FString OAction)
 bool UIODevice::GetKey(TEnumAsByte<EIO_Key> Key)
 {
 #if UE_VERSION_NEWER_THAN(4,24,0)
-    return GetKey_S(UEnum::GetValueAsString(Key));
+    FString keyStr = UEnum::GetValueAsString(Key);
 #else
-    return GetKey_S(UEnum::GetValueAsString(TEXT("EIO_Key"), Key));
+	FString keyStr = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), Key);
 #endif
-
-
+	return GetKey_S(keyStr);
 }
 
 void UIODevice::BindKey(TEnumAsByte<EIO_Key> Key, TEnumAsByte<EIOEvent::Type> EventType, FActionDelegate InCallback)
@@ -195,7 +193,7 @@ void UIODevice::BindKey(TEnumAsByte<EIO_Key> Key, TEnumAsByte<EIOEvent::Type> Ev
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyStr = UEnum::GetValueAsString(Key);
 #else
-    FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+	FString keyStr = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), Key);
 #endif
 
     BindKey_S(keyStr, EventType, InCallback);
@@ -243,7 +241,7 @@ void UIODevice::BindAxisKey(TEnumAsByte<EIO_Key> AxisKey, FAxisDelegate InCallba
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyStr = UEnum::GetValueAsString(AxisKey);
 #else
-    FString keyStr = UEnum::GetValueAsString(TEXT("EIO_Key"), AxisKey);
+	FString keyStr = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), AxisKey);
 #endif
     BindAxisKey_S(keyStr, InCallback);
 }
@@ -279,7 +277,7 @@ bool UIODevice::GetKeyDown(TEnumAsByte<EIO_Key> Key)
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyText = UEnum::GetValueAsString(Key);
 #else
-    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+        FString keyText = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), Key);
 #endif
     return GetKeyDown_S(keyText);
 }
@@ -297,7 +295,7 @@ float UIODevice::GetKeyDownDuration(TEnumAsByte<EIO_Key> Key)
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyText = UEnum::GetValueAsString(Key);
 #else
-    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+    FString keyText = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), Key);
 #endif
     return GetKeyDownDuration_S(keyText);
 }
@@ -315,7 +313,7 @@ bool UIODevice::GetKeyUp(TEnumAsByte<EIO_Key> Key)
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyText = UEnum::GetValueAsString(Key);
 #else
-    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), Key);
+        FString keyText = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), Key);
 #endif
     return GetKeyUp_S(keyText);
 }
@@ -340,7 +338,7 @@ float UIODevice::GetAxisKey(TEnumAsByte<EIO_Key> AxisKey)
 #if UE_VERSION_NEWER_THAN(4,24,0)
     FString keyText = UEnum::GetValueAsString(AxisKey);
 #else
-    FString keyText = UEnum::GetValueAsString(TEXT("EIO_Key"), AxisKey);
+    FString keyText = UEnum::GetValueAsString(TEXT("/Script/IOToolkit.EIO_Key"), AxisKey);
 #endif
     return GetAxisKey_S(keyText);
 }
